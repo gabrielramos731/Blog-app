@@ -1,0 +1,17 @@
+{% load static %}
+{% load static tailwind_tags%} <!-- tailwind_css tem preferência -->
+<head>
+    <title>Django blog</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% tailwind_css %}
+</head>
+<body>
+    <header>
+        <h1 class='bg-red-200 text-4xl w-fit mx-auto text-green-500'><a href="{% url "home" %}">Django blog</a></h1>
+    </header>
+    <div>
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+</html>

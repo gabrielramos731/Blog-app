@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+
+{% block content %} 
+{% for post in post_list %}
+<div class="item-post bg-slate-300 px-3 py-5">
+    <h2 class="text-2xl font-bold">
+        <!-- url busca a rota nomeada "post_detail e post.pk como argumento" -->
+        <a href=" {% url "post_detail" post.pk %} " class="text-amber-500 underline">{{ post.titulo|upper }}</a> By: {{ post.autor}}
+    </h2>
+    <p>{{ post.corpo }}</p>
+</div>
+{% endfor %} 
+{% endblock content %}
