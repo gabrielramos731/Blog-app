@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    <h2> {{post.titulo}} </h2>
-    <p> {{post.corpo}} </p>
+<div class="flex flex-col w-4/5 bg-slate-600 mx-auto p-3 rounded-lg gap-5">
+    <h2 class="text-center text-4xl font-bold text-slate-100"> {{post.titulo}} </h2>
+    <p class="text-slate-100 text-lg text-wrap"> {{post.corpo}} </p>
 </div>
 {% endblock content %}

@@ -12,5 +12,5 @@ class Post(models.Model):
     def __str__(self):
         return self.titulo
         
-    def get_absolute_url(self):  # ainda não sei o que é
+    def get_absolute_url(self):  # usado no template para buscar a rota de um elemento da tabela
         return reverse("post_detail", kwargs={"pk": self.pk})

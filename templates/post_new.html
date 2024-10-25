@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post" class='flex flex-col gap-2 text-black'>{% csrf_token %}
+    {{ form.as_p }}  <!-- renderiza os campos como parágrafos -->
+    <input type="submit" value="Save" class='w-fit text-slate-100 font-semibold px-4 py-2 bg-slate-600 rounded-lg'>
+</form>
+{% endblock content %}

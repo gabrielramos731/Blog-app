@@ -5,13 +5,16 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% tailwind_css %}
 </head>
-<body>
-    <header>
-        <h1 class='bg-red-200 text-4xl w-fit mx-auto text-green-500'><a href="{% url "home" %}">Django blog</a></h1>
-    </header>
-    <div>
-        {% block content %}
-        {% endblock content %}
-    </div>
+<body class='min-w-full h-screen bg-slate-200'>
+    <main class='py-10 px-3 flex flex-col gap-5'>
+        <header>
+            <h1 class='py-10 text-5xl font-bold font-mono w-fit mx-auto text-green-500'><a href="{% url "home" %}">Django blog</a></h1>
+        </header>
+        <a href=" {% url "post_new" %} " class="text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit"><span class='font-bold'>+</span> Novo Post</a>
+        <div class='flex flex-col gap-4 text-slate-100'>
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </main>
 </body>
 </html>
