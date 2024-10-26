@@ -2,7 +2,8 @@
 
 {% block content %} 
 {% for post in post_list %}
-<div class="item-post bg-slate-600 px-3 py-5 w-5/6 rounded-lg flex flex-col gap-4 overflow-hidden">
+
+<div class="item-post bg-slate-600 px-3 w-5/6 rounded-lg flex flex-col gap-4 overflow-hidden max-h-52">
     <h2 class="text-2xl font-bold text-slate-100">
         <!-- url busca a rota nomeada "post_detail e post.pk como argumento" -->
         {% comment %} <a href=" {% url "post_detail" post.pk %} " class="text-amber-500 underline">{{ post.titulo|upper }}</a> By: {{ post.autor}} {% endcomment %}
@@ -13,5 +14,6 @@
     </h2>
     <p class='text-slate-100'>{{ post.corpo }}</p>
 </div>
+
 {% endfor %} 
 {% endblock content %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post" class='text-black'>{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Update" class='text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit'>
+</form>
+
+{% endblock content %}
