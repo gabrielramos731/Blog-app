@@ -808,12 +808,12 @@ select {
   max-height: 13rem;
 }
 
-.w-4\/5 {
-  width: 80%;
+.w-3\/4 {
+  width: 75%;
 }
 
-.w-5\/6 {
-  width: 83.333333%;
+.w-4\/5 {
+  width: 80%;
 }
 
 .w-fit {
@@ -835,6 +835,10 @@ select {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .gap-2 {

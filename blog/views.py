@@ -17,19 +17,19 @@ class BlogDetailView(DetailView):
 class BlogCreateView(CreateView):
     model = Post
     template_name = "post_new.html"
-    fields = ['titulo','autor','corpo']
+    fields = ['titulo','autor','corpo','tag']
     
 class BlogUpdateView(UpdateView):
     model = Post
     template_name = "post_edit.html"
-    fields = ['titulo','corpo']
+    fields = ['titulo','corpo', 'tag']
     
 class BlogDeleteView(DeleteView):
     model = Post
     template_name = "post_delete.html"
     success_url = reverse_lazy("home") # redireciona para após rota até terminar de deletar
 
-class BlogPostSearchListView(ListView):
+class PostTitleSearchListView(ListView):
     model = Post
     template_name = "home.html"
 
@@ -37,10 +37,19 @@ class BlogPostSearchListView(ListView):
         query = self.request.GET.get('q')
         return Post.objects.filter(titulo__icontains=query)
     
-class BlogAuthPostSearchListView(ListView):
+class PostAuthorSearchListView(ListView):
     model = Post
     template_name = "home.html"
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         return Post.objects.filter(autor__username__icontains=query)
+
+class PostTagListView(ListView):
+    model = Post
+    template_name = "home.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('tag')
+        return Post.objects.filter(tag=query)
+    

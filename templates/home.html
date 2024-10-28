@@ -1,17 +1,24 @@
 {% extends "base.html" %} 
 
 {% block content %} 
+<section class='text-black'>
+    {% for tag_item in post_list %}
+        <a href=" {% url "blog_tag" %}?tag={{tag_item.tag}} "> {{tag_item.tag}} </a><br>
+    {% endfor %}
+</section>
+
 {% for post in post_list %}
 
-<div class="item-post bg-slate-600 px-3 w-5/6 rounded-lg flex flex-col gap-4 overflow-hidden max-h-52">
-    <h2 class="text-2xl font-bold text-slate-100">
+<div class="item-post bg-slate-600 px-3 w-3/4 rounded-lg flex flex-col gap-4 overflow-hidden max-h-52">
+    <article class=" text-slate-100 flex justify-between">
         <!-- url busca a rota nomeada "post_detail e post.pk como argumento" -->
         {% comment %} <a href=" {% url "post_detail" post.pk %} " class="text-amber-500 underline">{{ post.titulo|upper }}</a> By: {{ post.autor}} {% endcomment %}
         <div>
-            <a href=" {{ post.get_absolute_url }} " class="text-amber-500 underline">{{ post.titulo|upper }}</a> 
+            <h2 class='text-2xl font-bold'><a href=" {{ post.get_absolute_url }} " class="text-amber-500 underline">{{ post.titulo|upper }}</a></h2>
             <p class='text-lg'>By: {{ post.autor}}</p>
         </div>
-    </h2>
+        <span>Tag: {{ post.tag }} </span>
+    </article>
     <p class='text-slate-100'>{{ post.corpo }}</p>
 </div>
 

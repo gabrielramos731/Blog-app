@@ -13,7 +13,7 @@
 
         <!-- formulário de busca post -->
         <form action=" {% url "post_search" %} " method="get" class='text-black'>
-            <input type="text" name="q" id="" placeholder='Busca por um post'>
+            <input type="text" name="q" placeholder='Busca por um post'>
         </form>
 
         <!-- formulário de busca post/autor -->
@@ -21,7 +21,20 @@
             <input type="text" name="q" id="" placeholder='Busca posts de autor'>
         </form>
 
+        {% if user.is_authenticated %}
+            <p>Olá {{user.username}}! </p>
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                <button type="submit" class='text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit'>Logout</button>
+            </form>
+            
+        {% else %}
+            <p>Você não está logado.</p>
+            <a href=" {% url "login" %} " class="text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit">Log In</a>
+            <a href=" {% url "signup" %} " class="text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit">Sign Up</a>
+        {% endif %}
+        
         <a href=" {% url "post_new" %} " class="text-slate-100 bg-slate-600 px-4 py-2 rounded-lg w-fit"><span class='font-bold'>+</span> Novo Post</a>
+        
         <div class='flex flex-col gap-4 text-slate-100'>
             {% block content %}
             {% endblock content %}
