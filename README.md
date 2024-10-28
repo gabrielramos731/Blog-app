@@ -25,7 +25,7 @@ class Post(models.Model):
     def __str__(self):
         return self.autor, self.titulo
 
-    def get_absolute_url(self):  # ainda não sei o que é
+    def get_absolute_url(self):  # usado no template para buscar a rota de um elemento da tabela
         return reverse("post_detail", kwargs={"pk": self.pk})
 ```
 
@@ -58,6 +58,12 @@ class BlogListView(ListView):
 class BlogDetailView(DetailView):
     model = Post
     template_name = "post_detail.html"
+ 
+ # renderiza um template com campos para criar um novo post  
+class BlogCreateView(CreateView):
+    model = Post
+    template_name = "post_new.html"
+    fields = ['titulo','autor','corpo']
 ```
 
 ## URL’s
@@ -76,10 +82,12 @@ urlpatterns = [
 
 # blog > urls.py
 from django.urls import path
-from .views import BlogListView
+from .views import BlogListView, BlogDetailView, BlogCreateView
 
 urlpatterns = [
     path('', BlogListView.as_view(), name='home'),
+    path('post/<int:pk>', BlogDetailView.as_view(), name='post_detail'),
+    path('post/new', BlogCreateView.as_view(), name='post_new'),
 ]
 ```
 
@@ -93,6 +101,94 @@ Para facilitar o desenvolvimento da estilização das interfaces, realizamos a i
 
 ## Visão Geral
 
-![image.png](images/image.png)
+![image.png](/images/image.png)
 
-A URL root chama a view *BlogListView,* que renderiza o template *home.html* com o modelo de dados *Post*. Podemos usar uma tag django *url* para chamar uma outra rota `"post_detail" post.pk`  que aciona a view *BlogDetailView,* renderizando o template *post_detail.html* juntamente ao modelo *Post.* Ambos templates citados, estendem de *base.html.*
+A URL root chama a view *BlogListView,* que renderiza o template *home.html* com o modelo de dados *Post*. Podemos usar uma tag django *url* para chamar uma outra rota `"post_detail" post.pk`  que aciona a view *BlogDetailView,* renderizando o template *post_detail.html* juntamente ao modelo *Post.* Ambos templates citados, estendem de *base.html. CreateDetailView* é responsável por criar um novo post e atualizar *Post_model.* 
+
+## Busca por post e posts por autor
+
+![image.png](/images/image%201.png)
+
+Ao preencher um formulário e submeter, os dados são enviados para a rota nomeada em *action* do form via URL e direcionado para a view BlogPostSearch desta rota, que se comunica com a tabela de PostModel para serem processados com base nos dados passados pelo GET. Os dados são retornados para serem renderizados no template *post_search.html.*
+
+```python
+class PostTitleSearchListView(ListView):
+    model = Post
+    template_name = "home.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Post.objects.filter(titulo__icontains=query)
+    
+class PostAuthorSearchListView(ListView):
+    model = Post
+    template_name = "home.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Post.objects.filter(autor__username__icontains=query)
+```
+
+## Autenticação
+
+### Log In
+
+Por padrão, o Django já nos fornece uma aplicação para serviços de autenticação de usuário `django.contrib.auth` , já fornecendo diversas views para tais tarefas.
+
+Em *#django-project > urls.py,* adicionamos um caminho para processar as rotas relacionadas a autenticação `path('contas/', include("django.contrib.auth.urls"))` . A view *LoginView* irá buscar um template em *templates>registration>login.html* naturalmente, onde será renderizado os campos para login.
+
+```html
+*<!-- templates > registration > login.html -->*
+<div>
+    <h2>Log In</h2>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log In</button>
+    </form>
+</div>
+```
+
+Podemos adicionar em *setings.py* uma nova linha que redireciona para uma URL após um login bem sucedido: `LOGIN_REDIRECT_URL = "home"`
+
+### Log Out
+
+Adicionamos apenas um form para enviar via POST uma requisição para deslogar para a rota correta.
+
+```html
+<form method="POST" action="{% url 'logout' %}">{% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+```
+
+### Sign Up
+
+Para o sistema de registrar-se, criamos uma nova aplicação *accounts* que irá gerenciar questões de Sign Up. Devemos indicar o arquivo dessas rotas e seu prefixo de acesso `path('contas/', include("accounts.urls"))`
+
+```python
+# accounts > urls.py
+from .views import SignUpView
+urlpatterns = [
+    path('signup/', SignUpView.as_view(), name='signup')
+]
+
+# accounts > views.py
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
+    
+# templates > resgitration > signup.html
+<div class='text-black'>
+    <h2>Sign In</h2>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign In</button>
+    </form>
+</div>
+```
+
+Adicionamos a rota *signup* na aplicação para a view *SignUpView*, que cria o formulário *signup.html* de cadastro e retorna para *login* após sucesso.
